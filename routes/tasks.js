@@ -45,7 +45,7 @@ router.put('/:id', (req, res) =>{
         if(!task) res.status(404).send('That task was not found');
     
         if(!req.body.name || req.body.name.length < 3){
-            res.status(400).send('The name of the task is required and minimum of 3 characters long.');
+            res.status(400).send('The name of the task is required and minimum of 3 characters long.'); 
             return;
         }
     
