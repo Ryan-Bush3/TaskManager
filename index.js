@@ -2,6 +2,7 @@ const Joi = require('joi');
 const express = require('express');
 const app = express();
 const tasks = require('./routes/tasks');
+const users = require('./routes/users');
 const db = require('./routes/db-tasks');
 
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
@@ -11,6 +12,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/api/tasks/inmemory', tasks);
 app.use('/api/tasks', db);
+app.use('/api/users', users);
 
 
 const port = process.env.PORT || 3000;

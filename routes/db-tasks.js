@@ -1,4 +1,4 @@
-const { Task } = require('../models/task');
+const { Task, validateTask } = require('../models/task');
 const mongoose = require('mongoose');
 const express = require('express');
 const router = express.Router();
@@ -11,7 +11,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager')
 router.post('/', (req, res) =>{
     async function createTask(){
         const task = await new Task({
-            title: req.body.title,
+            title: req.body.title, 
             task: req.body.task,
             additionalInfo: req.body.additionalInfo,
             category: req.body.category,
