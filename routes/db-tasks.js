@@ -1,3 +1,5 @@
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
 const { Task, validateTask } = require('../models/task');
 const mongoose = require('mongoose');
 const express = require('express');
@@ -8,7 +10,7 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager')
     .catch(err => console.error('Could not connect...', err));
 
 // Create task
-router.post('/', (req, res) =>{
+router.post('/', auth, (req, res) =>{
     async function createTask(){
         const task = await new Task({
             title: req.body.title, 
@@ -63,7 +65,7 @@ router.put('/:id', (req, res) =>{
 });
 
 // Delete task
-router.delete('/:id', (req, res) =>{
+router.delete('/:id', [auth, admin], (req, res) =>{
     async function removeTask(){
         const remove = await Task.deleteOne({ _id: req.params.id });
         res.send(remove);

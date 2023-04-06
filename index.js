@@ -5,6 +5,12 @@ const tasks = require('./routes/tasks');
 const users = require('./routes/users');
 const db = require('./routes/db-tasks');
 const auth = require('./routes/auth');
+const config = require('config');
+
+if (!config.get('jwtPrivateKey')){
+    console.error('FATAL ERROR: jwtPrivateKey is not defined.');
+    process.exit(1);
+}
 
 console.log(`NODE_ENV: ${process.env.NODE_ENV}`);
 console.log(`app: ${app.get('env')}`);
