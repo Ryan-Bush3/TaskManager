@@ -1,5 +1,6 @@
 const auth = require('../middleware/auth');
 const admin = require('../middleware/admin');
+const owner = require('../middleware/owner');
 const { Task, validateTask } = require('../models/task');
 const mongoose = require('mongoose');
 const express = require('express');
@@ -13,11 +14,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/task-manager')
 router.post('/', auth, (req, res) =>{
     async function createTask(){
         const task = await new Task({
-            title: req.body.title, 
+            title: req.body.title,
             task: req.body.task,
             additionalInfo: req.body.additionalInfo,
             category: req.body.category,
-            tags: [1, 2],
+            tags: req.body.tags,
             severity: req.body.severity,
             completed: false
         });
@@ -29,7 +30,7 @@ router.post('/', auth, (req, res) =>{
 });
 
 // Return one task
-router.get('/:id', (req, res) =>{
+router.get('/:id', owner, (req, res) =>{
     async function getTask(){
         const result = await Task
         .findById({ _id: req.params.id });
@@ -39,16 +40,16 @@ router.get('/:id', (req, res) =>{
 });
 
 // Return all tasks
-router.get('/', (req, res) =>{
+router.get('/', owner, (req, res) =>{
     async function allTasks(){
         const result = await Task.find();
         res.send(result);
     } 
     allTasks();
-});
+}); 
 
 // Update a task
-router.put('/:id', (req, res) =>{
+router.put('/:id', owner, (req, res) =>{
     async function updateTask(){
         const task = await Task.updateOne({ _id: req.params.id }, {
             $set: {
@@ -65,7 +66,7 @@ router.put('/:id', (req, res) =>{
 });
 
 // Delete task
-router.delete('/:id', [auth, admin], (req, res) =>{
+router.delete('/:id', [auth, admin, owner], (req, res) =>{
     async function removeTask(){
         const remove = await Task.deleteOne({ _id: req.params.id });
         res.send(remove);
